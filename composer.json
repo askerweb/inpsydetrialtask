@@ -1,0 +1,20 @@
+{
+  "name": "askerweb/inpsyde-askerweb",
+  "description": "inpsyde test task",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "AskerWeb",
+      "email": "askerweb@yandex.by"
+    }
+  ],
+  "require": {
+    "php": "^7.4 | ^8.0",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "brain/monkey": "^2.6",
+    "phpunit/phpunit": "^9.5"
+  }
+}
