@@ -7,11 +7,11 @@
  * @package  InspydeAskerweb
  * @author   AskerWeb <askerweb@yandex.by>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     https://github.com/askerweb/
+ * @link     https://github.com/askerweb/inpsydetrialtask/
  */
 /*
  * Plugin Name: Askerweb Test Task
- * Plugin URI: https://github.com/askerweb/inspyde
+ * Plugin URI: https://github.com/askerweb/inpsydetrialtask/
  * Description: Askerweb Test Task
  * Version: 1.0.0
  * Author: Askerweb
@@ -25,7 +25,7 @@
  * @package  Inspydeaskerweb
  * @author   AskerWeb <askerweb@yandex.by>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     https://github.com/askerweb/
+ * @link     https://github.com/askerweb/inpsydetrialtask/
  */
 class InpsydeAskerweb
 {

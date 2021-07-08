@@ -7,7 +7,7 @@
  * @package  InspydeAskerweb
  * @author   AskerWeb <askerweb@yandex.by>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     https://github.com/askerweb/
+ * @link     https://github.com/askerweb/inpsydetrialtask/
  */
 namespace InpsydeAskerweb\Tests;
 require_once 'MyTestCase.php';
@@ -20,7 +20,7 @@ use InpsydeAskerweb;
  * @package  Inspydeaskerweb
  * @author   AskerWeb <askerweb@yandex.by>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     https://github.com/askerweb/
+ * @link     https://github.com/askerweb/inpsydetrialtask/
  */
 class MyTest extends MyTestCase
 {

@@ -7,7 +7,7 @@
  * @package  InspydeAskerweb
  * @author   AskerWeb <askerweb@yandex.by>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     https://github.com/askerweb/
+ * @link     https://github.com/askerweb/inpsydetrialtask/
  */
 get_header();
 ?>
