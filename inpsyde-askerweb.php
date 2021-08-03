@@ -1,4 +1,5 @@
 <?php
+
 /**
  * InspydeAskerweb WordPress Plugin
  * php version 7.4
@@ -9,6 +10,7 @@
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     https://github.com/askerweb/inpsydetrialtask/
  */
+
 /*
  * Plugin Name: Askerweb Test Task
  * Plugin URI: https://github.com/askerweb/inpsydetrialtask/
@@ -18,6 +20,8 @@
  * Author URI: https://askerweb.by/
  * License: MIT
  */
+namespace InpsydeAskerweb;
+
 /**
  * Class InpsydeAskerweb
  *
@@ -50,18 +54,31 @@ class InpsydeAskerweb
      */
     private array $_error = array();
 
+
     /**
-     * Endpoint
+     * Instance of the class for working with requests
      *
-     * @var string $_pagename
+     * @var Requests $requests
      */
-    private string $_pagename = "users-table";
+    public Requests $requests;
+
+    /**
+     * Instance of the class for working with style and scripts
+     *
+     * @var StylesScripts $stylesScripts
+     */
+    public StylesScripts $stylesScripts;
 
     /**
      * InpsydeAskerweb constructor.
      */
     public function __construct()
     {
+        require_once 'class-ia-requests.php';
+        //$this->requests = new InpsydeAskerweb\Requests();
+        $this->requests = new Requests();
+        require_once 'class-ia-stylesscripts.php';
+        $this->stylesScripts = new StylesScripts();
         $this->addHooks();
     }
 
@@ -73,27 +90,13 @@ class InpsydeAskerweb
     public function addHooks(): void
     {
         add_action('plugins_loaded', [$this, 'getData'], 20);
-        add_action('init', [$this, 'createLink'], 20);
-        add_action('parse_request', [$this, 'request']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueue']);
+        add_action('wp_enqueue_scripts', [$this->stylesScripts, 'enqueue']);
+        add_action('parse_request', [ $this, 'requestsInit'], 19);
+        add_action('parse_request', [ $this->requests, 'request'], 20);
+        add_action('init', [ $this->requests, 'createLink'], 20);
     }
 
-    /**
-     * Create custom endpoints
-     *
-     * @return void
-     */
-    public function createLink(): void
-    {
-        $this->_pagename = (string)apply_filters(
-            'inpsydeaskerweb_page_link',
-            $this->_pagename
-        );
-        add_rewrite_rule(
-            $this->_pagename . '/?$',
-            'index.php?pagename=' . $this->_pagename
-        );
-    }
+
 
     /**
      * Get data from $this->url and set response to $this->data
@@ -106,11 +109,8 @@ class InpsydeAskerweb
             $this->_url,
             ['header' => ['Cache-Control' => 'must-revalidate,max-age=3600']]
         );
-        if (!($response instanceof WP_Error)
-            && $response['response']['code'] == 200
-        ) {
+        if (!($response instanceof WP_Error) && $response['response']['code'] == 200) {
             if (!empty($response['body'])) {
-
                 $data = (array)json_decode($response['body']);
                 $this->_data = $data;
             } else {
@@ -125,54 +125,18 @@ class InpsydeAskerweb
                 'Ошибка получения данных'
             );
         }
-
     }
 
     /**
-     * If its page $this->._pagename load "userstables.php" template
-     *
-     * @param $wp WP WordPress environment instance
+     * Initialize requests Class
      *
      * @return void
      */
-    public function request($wp): void
+    public function requestsInit(): void
     {
-
-        if ($wp->query_vars['pagename'] == $this->_pagename) {
-            $args = array(
-                'users' => $this->_data,
-                'errors' => $this->_error
-            );
-            $overridden_template= locate_template('inpsyde-askerweb/userstable.php');
-            if ($overridden_template) {
-                load_template($overridden_template, true, $args);
-            } else {
-                load_template(__DIR__ . '/templates/userstable.php', true, $args);
-            }
-            exit();
-        }
+        $this->getData();
+        $this->requests->init($this->_data, $this->_error);
     }
-
-    /**
-     * Connects all needed styles and scripts
-     *
-     * @return void
-     */
-    public function enqueue(): void
-    {
-        wp_enqueue_script(
-            'main',
-            plugins_url('assets/js/main.min.js', __FILE__),
-            [],
-            '',
-            true
-        );
-        wp_enqueue_style(
-            'main',
-            plugins_url('assets/css/main.min.css', __FILE__)
-        );
-    }
-
 }
 
 $IA = new InpsydeAskerweb();

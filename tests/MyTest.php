@@ -32,10 +32,14 @@ class MyTest extends MyTestCase
     public function testAddHooksActuallyAddsHooks():void
     {
         include_once '../inpsyde-askerweb.php';
-        $new = new InpsydeAskerweb();
-        self::assertNotFalse(has_action('init', [ $new, 'createLink']));
-        self::assertNotFalse(has_action('parse_request', [ $new, 'request' ]));
-        self::assertNotFalse(has_action('wp_enqueue_scripts', [ $new, 'enqueue' ]));
+        include_once '../class-ia-requests.php';
+        $new = new InpsydeAskerweb\InpsydeAskerweb();
+        $new_requests = $new->requests;
+        $new_stylesScripts = $new->stylesScripts;
+        self::assertNotFalse(has_action('init', [ $new_requests, 'createLink']));
+        self::assertNotFalse(has_action('parse_request', [ $new, 'requestsInit' ]));
+        self::assertNotFalse(has_action('parse_request', [ $new_requests, 'request' ]));
+        self::assertNotFalse(has_action('wp_enqueue_scripts', [ $new_stylesScripts, 'enqueue' ]));
         self::assertNotFalse(has_action('plugins_loaded', [ $new, 'getData' ]));
     }
 }
